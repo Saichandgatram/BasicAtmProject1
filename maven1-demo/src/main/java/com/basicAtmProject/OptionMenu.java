@@ -1,132 +1,130 @@
 package com.basicAtmProject;
 
-
-
+import java.io.IOException;
 import java.util.*;
 
-public class Account {
+public class OptionMenu extends Account{
 
-	Scanner input = new Scanner(System.in);
+	Scanner menuInput = new Scanner(System.in);
 
-	private int customerNumber;
-	private int pinNumber;
-	private double currentBalance = 0;
-	private double savingsBalance = 0;
+	HashMap<Integer, Integer> data = new HashMap<Integer, Integer>();
 
-	public int setCustomerNumber(int customerNumber)
+	public void getlogin() throws IOException
 	{
-		this.customerNumber = customerNumber;
-		return customerNumber;
-	}
-
-	public int setPinNumber(int pinNumber)
-	{
-		this.pinNumber = pinNumber;
-		return pinNumber;
-	}
-
-	public int getCustomerNumber()
-	{
-		return customerNumber;
-	}
-	public int getPinNumber()
-	{
-		return pinNumber;
-	}
-	public double getCurrentBalance()
-	{
-		return currentBalance;
-	}
-	public double getSavingsBalance()
-	{
-		return savingsBalance;
-	}
-	public void calcCurrentWithdraw(double amount)
-	{
-		currentBalance = (currentBalance-amount);
-		//return currentBalance;
-	}
-	public void calcSavingsWithdraw(double amount)
-	{
-		savingsBalance = (savingsBalance-amount);
-		//return savingsBalance;
-	}
-	public void  calcCurrentDeposit(double amount)
-	{
-		currentBalance = (currentBalance+amount);
-	}
-	public void  calcSavingsDeposit(double amount)
-	{
-		savingsBalance = (savingsBalance+amount);
-	}
-
-	//Withdrawl from current Account
-	public void getCurrentWithdrawlInput()
-	{
-		System.out.println("Current Account Balance : " + Double.toString(currentBalance));
-		System.out.println("Enter the Amount you wnat to Withdraw : ");
-		double amount = input.nextDouble();
-		if((currentBalance-amount)>=0)
+		int notDone = 1;
+		do
 		{
-			calcCurrentWithdraw(amount);
-			System.out.println("Withdrawl Successful" + "Current Account Balance : " + Double.toString(currentBalance));
-		}
-		else
+			try
+			{
+				data.put(123456, 1234);
+				data.put(456789, 4567);
+				System.out.println("Welcome");
+				System.out.println("Enter Your Customer ID : ");
+				setCustomerNumber(menuInput.nextInt());
+				System.out.println("Enter Your Pin : ");
+				setPinNumber(menuInput.nextInt());
+			}
+			catch(Exception e)
+			{
+				System.out.println("\n" + "Invalid input" + "\n");
+				notDone = 0;
+			}
+			for(Map.Entry<Integer, Integer> mapElement : data.entrySet())
+			{
+				if(mapElement.getKey()== getCustomerNumber() && mapElement.getValue().intValue() == getPinNumber())
+				{
+					getAccountType();
+				}
+			}
+			System.out.println("Wrong Credentials. Please Try Again");
+		}while(notDone == 1);
+	}
+
+	public void getAccountType()
+	{
+		System.out.println("Select the Account you want to Access : ");
+		System.out.println("Enter 1 - Current Account");
+		System.out.println("Enter 2 - Savings Account");
+		System.out.println("Enter 3 - For Exit");
+		System.out.println("Enter Your Choice : ");
+
+		int choice = menuInput.nextInt();
+		switch(choice)
 		{
-			System.out.println("Insufficient Amount in your Accout to withdraw");
+		case 1:
+			getCurrent();
+			break;
+		case 2:
+			getSavings();
+		case 3:
+			System.out.println("Thank you for Using ATM, Bye.");
+			break;
+		default:
+			System.out.println("\n" + "Invalid choice. Try Again" + "\n");
+			getAccountType();
+
 		}
 	}
 
-	//Withdrawl From Savings Account
-	public void getSavingsWithdrawlInput()
+	public void getCurrent()
 	{
-		System.out.println("Savings Account Balance : " + Double.toString(savingsBalance));
-		System.out.println("Enter the Amount to withdraw : ");
-		double amount = input.nextDouble();
-		if((savingsBalance-amount)>=0)
+		System.out.println("Current Account : ");
+		System.out.println("Type 1 - View Balance");
+		System.out.println("Type 2 - Withdraw Funds");
+		System.out.println("Type 3 - Deposit Funds");
+		System.out.println("Type 4 - Exit");
+		System.out.println("Choice : ");
+		int choice = menuInput.nextInt();
+		switch(choice)
 		{
-			calcSavingsWithdraw(amount);
-			System.out.println("Withdrawl Successful" + "Savings Account Balance : " + Double.toString(savingsBalance));
-		}
-		else
-		{
-			System.out.println("Insufficient Amount in your Account to withdraw");
+		case 1:
+			System.out.println("Current Balance : " + Double.toString(getCurrentBalance()));
+			getAccountType();
+			break;
+		case 2:
+			getCurrentWithdrawlInput();
+			getAccountType();
+			break;
+		case 3:
+			getCurrentDepositInput();
+			getAccountType();
+			break;
+		case 4:
+			System.out.println("Thanking for Visiting. Bye.");
+			break;
+		default:
+			getCurrent();
 		}
 	}
 
-	//Deposit in Current Account
-	public void getCurrentDepositInput()
+	public void getSavings()
 	{
-		System.out.println("Current Account Balance : " + Double.toString(currentBalance));
-		System.out.println("Enter the amount you want to add : ");
-		double amount = input.nextDouble();
-		if(amount > 0)
+		System.out.println("Savings Account : ");
+		System.out.println("Type 1 - View Balance");
+		System.out.println("Type 2 - Withdraw Funds");
+		System.out.println("Type 3 - Deposit Funds");
+		System.out.println("Type 4 - Exit");
+		System.out.println("Choice : ");
+		int choice = menuInput.nextInt();
+		switch(choice)
 		{
-			calcCurrentDeposit(amount);
-			System.out.println("New Current Balance is : " + Double.toString(currentBalance));
-		}
-		else
-		{
-			System.out.println("Amount cannot be negative");
+		case 1:
+			System.out.println("Savings Balance : " + Double.toString(getSavingsBalance()));
+			getAccountType();
+			break;
+		case 2:
+			getSavingsWithdrawlInput();
+			getAccountType();
+			break;
+		case 3:
+			getSavingsDepositInput();
+			getAccountType();
+			break;
+		case 4:
+			System.out.println("Thanking for Visiting. Bye.");
+			break;
+		default:
+			getSavings();
 		}
 	}
-
-	// Deposit in Savings account
-	public void getSavingsDepositInput()
-	{
-		System.out.println("Savings Account Balance : " + Double.toString(savingsBalance));
-		System.out.println("Enter the amount you want to add : ");
-		double amount = input.nextDouble();
-		if(amount > 0)
-		{
-			calcSavingsDeposit(amount);
-			System.out.println("New Current Balance is : " + Double.toString(savingsBalance));
-		}
-		else
-		{
-			System.out.println("Amount cannot be negative");
-		}
-	}
-
-
 }
